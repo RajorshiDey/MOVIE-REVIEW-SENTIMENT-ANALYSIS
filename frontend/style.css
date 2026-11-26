@@ -1,0 +1,555 @@
+:root {
+  /* Cinema color palette: velvet red, theater dark, buttery popcorn gold */
+  --bg: #070202; /* Extremely dark charcoal-black */
+  --surface: rgba(18, 12, 12, 0.9); /* Deep theatre burgundy-black */
+  --surface-solid: #150b0b;
+  --border: rgba(239, 68, 68, 0.15); /* Dim red backlights */
+  --border-focus: rgba(245, 158, 11, 0.7); /* Theater spotlight gold */
+  --text: #fef2f2; /* Soft warm-white */
+  --text-muted: #fda4af; /* Rose-tinted muted text */
+  --accent: #e5a93b; /* Classic warm marquis gold */
+  --accent-hover: #f59e0b;
+  --positive: #10b981;
+  --positive-bg: rgba(16, 185, 129, 0.14);
+  --negative: #f43f5e;
+  --negative-bg: rgba(244, 63, 94, 0.14);
+  --radius: 12px;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: "Inter", system-ui, -apple-system, sans-serif;
+  background-color: var(--bg);
+  background-image: 
+    /* Subtle cinematic projector beam & lens flare overlay */
+    radial-gradient(ellipse at top, rgba(239, 68, 68, 0.15) 0%, transparent 60%),
+    radial-gradient(circle at 80% 20%, rgba(245, 158, 11, 0.08) 0%, transparent 40%),
+    /* Tiny noise pattern to mimic film grain */
+    radial-gradient(rgba(255, 255, 255, 0.1) 0.5px, transparent 0.5px);
+  background-size: 100% 100%, 100% 100%, 8px 8px;
+  color: var(--text);
+  min-height: 100vh;
+  line-height: 1.5;
+  padding: 2rem 1rem 4rem;
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* Simulated cinematic backlighting/projector flare */
+.bg-glow {
+  position: fixed;
+  top: -220px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 900px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(245, 158, 11, 0.07) 0%, rgba(239, 68, 68, 0.04) 50%, transparent 80%);
+  pointer-events: none;
+  z-index: -1;
+  filter: blur(40px);
+}
+
+.container {
+  max-width: 720px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* Header */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.5rem;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.logo-icon {
+  font-size: 1.75rem;
+  width: 48px;
+  height: 48px;
+  display: grid;
+  place-items: center;
+  background: var(--surface-solid);
+  border: 1px solid rgba(229, 169, 59, 0.3); /* Gold border for marquee icon */
+  border-radius: 12px;
+  box-shadow: 0 0 15px rgba(229, 169, 59, 0.15);
+}
+
+h1 {
+  font-size: 1.65rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  text-transform: uppercase; /* Cinema marquee typography */
+  color: #fff;
+  text-shadow: 0 0 10px rgba(229, 169, 59, 0.4), 0 0 20px rgba(239, 68, 68, 0.2);
+}
+
+.subtitle {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--accent);
+}
+
+/* API Status Pill */
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 0.45rem 0.9rem;
+  border-radius: 4px; /* Ticket-like corner */
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px dashed rgba(239, 68, 68, 0.3); /* Vintage film reel pattern effect */
+  color: var(--text-muted);
+}
+
+.status-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+
+.status-online .status-dot {
+  background: var(--positive);
+  box-shadow: 0 0 8px var(--positive);
+}
+
+.status-offline .status-dot {
+  background: var(--negative);
+  box-shadow: 0 0 8px var(--negative);
+}
+
+/* Cards (Styled like Retro Movie Tickets / Projection Displays) */
+.card {
+  background: var(--surface);
+  backdrop-filter: blur(12px);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius);
+  padding: 2rem;
+  box-shadow: 
+    0 10px 30px rgba(0, 0, 0, 0.8),
+    inset 0 0 40px rgba(239, 68, 68, 0.03); /* Velvet backglow */
+  position: relative;
+}
+
+/* Simulated ticket cut-out perforation marks */
+.card::before, .card::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  width: 14px;
+  height: 28px;
+  background: var(--bg);
+  border-radius: 50%;
+  transform: translateY(-50%);
+  display: none; /* Desktop/larger screen flavor - feel free to adjust visibility */
+}
+@media (min-width: 768px) {
+  .card::before { left: -8px; border-radius: 0 14px 14px 0; border: 1.5px solid var(--border); border-left: none; }
+  .card::after { right: -8px; border-radius: 14px 0 0 14px; border: 1.5px solid var(--border); border-right: none; }
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.85rem;
+  border-bottom: 1px dashed rgba(239, 68, 68, 0.2);
+  padding-bottom: 0.5rem;
+}
+
+.card-header label,
+.card-header h2 {
+  font-size: 0.9rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--accent);
+}
+
+.meta-text,
+.meta-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: rgba(254, 242, 242, 0.5);
+}
+
+/* Input Display Box */
+textarea {
+  width: 100%;
+  background: rgba(4, 2, 2, 0.85);
+  color: var(--text);
+  border: 1.5px solid rgba(239, 68, 68, 0.2);
+  border-radius: 8px;
+  padding: 1.15rem;
+  font-family: inherit;
+  font-size: 0.95rem;
+  resize: vertical;
+  min-height: 140px;
+  transition: all 0.25s ease;
+  box-shadow: inset 0 3px 10px rgba(0, 0, 0, 0.8);
+}
+
+textarea:focus {
+  outline: none;
+  border-color: var(--border-focus);
+  box-shadow: 
+    inset 0 3px 10px rgba(0, 0, 0, 0.9),
+    0 0 15px rgba(245, 158, 11, 0.25);
+}
+
+textarea::placeholder {
+  color: rgba(254, 242, 242, 0.25);
+  font-style: italic;
+}
+
+/* Sample Chips */
+.samples {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.samples-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: rgba(254, 242, 242, 0.4);
+}
+
+.chip {
+  background: rgba(239, 68, 68, 0.06);
+  color: var(--text-muted);
+  border: 1px solid rgba(239, 68, 68, 0.15);
+  border-radius: 4px; /* Industrial / ticket ticket shape */
+  padding: 0.35rem 0.85rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.chip:hover {
+  background: var(--accent);
+  color: #000;
+  border-color: var(--accent);
+  box-shadow: 0 0 10px rgba(229, 169, 59, 0.4);
+}
+
+/* Interactive CTA Buttons */
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.8rem 1.5rem;
+  border-radius: 6px;
+  font-family: inherit;
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  border: none;
+  transition: all 0.15s ease;
+}
+
+.btn:active {
+  transform: scale(0.97);
+}
+
+.btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--accent) 0%, #d97706 100%);
+  color: #0d0606;
+  box-shadow: 0 4px 15px rgba(229, 169, 59, 0.3);
+}
+
+.btn-primary:hover:not(:disabled) {
+  background: var(--accent-hover);
+  box-shadow: 0 4px 20px rgba(245, 158, 11, 0.5);
+}
+
+.btn-secondary {
+  background: transparent;
+  color: var(--text-muted);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+.btn-secondary:hover:not(:disabled) {
+  background: rgba(239, 68, 68, 0.08);
+  color: var(--text);
+  border-color: rgba(239, 68, 68, 0.5);
+}
+
+.text-btn {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.text-btn:hover {
+  color: #fff;
+  text-decoration: underline;
+}
+
+/* Spinner */
+.spinner {
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(0,0,0,0.25);
+  border-top-color: #0d0606;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Feedback message */
+.error-msg {
+  margin-top: 1rem;
+  padding: 0.75rem 1rem;
+  border-radius: 6px;
+  background: var(--negative-bg);
+  color: #fca5a5;
+  font-size: 0.8rem;
+  font-weight: 600;
+  border: 1.5px solid rgba(244, 63, 94, 0.3);
+}
+
+/* Result Overlay Board */
+.result-card {
+  animation: slideFade 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes slideFade {
+  from { opacity: 0; transform: translateY(15px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.result-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px dashed rgba(239, 68, 68, 0.2);
+  margin-bottom: 1.5rem;
+}
+
+.sentiment-row {
+  margin-top: 0.4rem;
+}
+
+.sentiment-badge {
+  display: inline-block;
+  font-size: 1.25rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 0.4rem 1rem;
+  border-radius: 4px; /* Classic sign badge shape */
+}
+
+.sentiment-badge.positive {
+  color: #10b981;
+  background: rgba(16, 185, 129, 0.12);
+  border: 1px solid rgba(16, 185, 129, 0.4);
+  text-shadow: 0 0 10px rgba(16, 185, 129, 0.3);
+  box-shadow: 0 0 15px rgba(16, 185, 129, 0.08);
+}
+
+.sentiment-badge.negative {
+  color: #f43f5e;
+  background: rgba(244, 63, 94, 0.12);
+  border: 1px solid rgba(244, 63, 94, 0.4);
+  text-shadow: 0 0 10px rgba(244, 63, 94, 0.3);
+  box-shadow: 0 0 15px rgba(244, 63, 94, 0.08);
+}
+
+.confidence-box {
+  text-align: right;
+}
+
+.confidence-value {
+  display: block;
+  font-size: 1.95rem;
+  font-weight: 850;
+  letter-spacing: -0.01em;
+  color: var(--accent);
+  text-shadow: 0 0 10px rgba(229, 169, 59, 0.25);
+}
+
+/* Visualization Trackers */
+.prob-group {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.prob-item {
+  position: relative;
+}
+
+.prob-header {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.45rem;
+  color: var(--text-muted);
+}
+
+.prob-header span:last-child {
+  color: var(--text);
+}
+
+.progress-track {
+  height: 8px;
+  background: rgba(0, 0, 0, 0.9);
+  border: 1px solid rgba(255,255,255,0.05);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  border-radius: 999px;
+  transition: width 0.75s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.positive-fill {
+  background: linear-gradient(90deg, #0f766e 0%, #10b981 100%);
+  box-shadow: 0 0 8px rgba(16, 185, 129, 0.45);
+}
+
+.negative-fill {
+  background: linear-gradient(90deg, #be123c 0%, #f43f5e 100%);
+  box-shadow: 0 0 8px rgba(244, 63, 94, 0.45);
+}
+
+/* Retro Log Section */
+.history-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.history-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.85rem 1.15rem;
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(239, 68, 68, 0.12);
+  border-radius: 6px;
+  transition: border-color 0.2s ease;
+}
+
+.history-item:hover {
+  border-color: rgba(239, 68, 68, 0.35);
+}
+
+.history-text {
+  font-size: 0.85rem;
+  color: rgba(254, 242, 242, 0.7);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.history-tag {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 0.25rem 0.65rem;
+  border-radius: 3px;
+  white-space: nowrap;
+}
+
+.history-tag.positive {
+  color: var(--positive);
+  background: rgba(16, 185, 129, 0.1);
+  border: 1px solid rgba(16, 185, 129, 0.2);
+}
+
+.history-tag.negative {
+  color: var(--negative);
+  background: rgba(244, 63, 94, 0.1);
+  border: 1px solid rgba(244, 63, 94, 0.2);
+}
+
+.hidden {
+  display: none !important;
+}
+
+/* Responsiveness adjustments */
+@media (max-width: 600px) {
+  body {
+    padding: 1.5rem 0.75rem 3rem;
+  }
+
+  .card {
+    padding: 1.35rem 1.15rem;
+  }
+
+  .actions {
+    flex-direction: column-reverse;
+  }
+
+  .btn {
+    width: 100%;
+  }
+
+  .confidence-value {
+    font-size: 1.6rem;
+  }
+}

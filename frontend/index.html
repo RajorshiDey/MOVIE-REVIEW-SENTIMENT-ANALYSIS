@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CineSense — Movie Review Sentiment Analyzer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="bg-glow" aria-hidden="true"></div>
+
+  <main class="container">
+    <header class="header">
+      <div class="brand">
+        <span class="logo-icon">🎬</span>
+        <div>
+          <h1>CineSense</h1>
+          <p class="subtitle">Movie Review Sentiment Analysis</p>
+        </div>
+      </div>
+      <div id="api-status" class="status-pill status-checking" title="Backend API status">
+        <span class="status-dot"></span>
+        <span id="api-status-text">Connecting...</span>
+      </div>
+    </header>
+
+    <section class="card input-card">
+      <div class="card-header">
+        <label for="review-input">Enter a Movie Review</label>
+        <span id="word-count" class="meta-text">0 words</span>
+      </div>
+
+      <textarea
+        id="review-input"
+        rows="5"
+        placeholder="e.g., The cinematography was breathtaking and the performances felt completely authentic from start to finish..."
+      ></textarea>
+
+      <div class="samples">
+        <span class="samples-label">Try a sample:</span>
+        <button type="button" class="chip" data-sample="positive">Positive</button>
+        <button type="button" class="chip" data-sample="negative">Negative</button>
+      </div>
+
+      <div class="actions">
+        <button type="button" id="clear-btn" class="btn btn-secondary">Clear</button>
+        <button type="button" id="analyze-btn" class="btn btn-primary">
+          <span class="btn-text">Analyze Sentiment</span>
+          <span class="spinner hidden" aria-hidden="true"></span>
+        </button>
+      </div>
+
+      <p id="error-msg" class="error-msg hidden" role="alert"></p>
+    </section>
+
+    <section id="result-card" class="card result-card hidden" aria-live="polite">
+      <div class="result-top">
+        <div>
+          <span class="meta-label">Predicted Sentiment</span>
+          <div class="sentiment-row">
+            <span id="sentiment-badge" class="sentiment-badge">Positive</span>
+          </div>
+        </div>
+        <div class="confidence-box">
+          <span class="meta-label">Confidence</span>
+          <span id="confidence-value" class="confidence-value">0%</span>
+        </div>
+      </div>
+
+      <div class="prob-group">
+        <div class="prob-item">
+          <div class="prob-header">
+            <span>Positive Probability</span>
+            <span id="pos-prob-text">0%</span>
+          </div>
+          <div class="progress-track">
+            <div id="pos-bar" class="progress-fill positive-fill" style="width: 0%"></div>
+          </div>
+        </div>
+
+        <div class="prob-item">
+          <div class="prob-header">
+            <span>Negative Probability</span>
+            <span id="neg-prob-text">0%</span>
+          </div>
+          <div class="progress-track">
+            <div id="neg-bar" class="progress-fill negative-fill" style="width: 0%"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="history-section" class="card history-card hidden">
+      <div class="card-header">
+        <h2>Recent Analyses</h2>
+        <button type="button" id="clear-history-btn" class="text-btn">Clear History</button>
+      </div>
+      <ul id="history-list" class="history-list"></ul>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
